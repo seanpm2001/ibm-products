@@ -38,7 +38,7 @@ export default {
 
 const Template = (args) => {
   return (
-    <ButtonMenu label="Primary button" renderIcon={ChevronDown16} {...args}>
+    <ButtonMenu label="Primary button here" renderIcon={ChevronDown16} {...args}>
       <ButtonMenuItem
         itemText="Option 1a"
         onClick={action(`Click on Option 1`)}
