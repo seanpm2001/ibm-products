@@ -46,6 +46,7 @@ export let ButtonMenu = React.forwardRef(
       kind = defaults.kind,
       label,
       menuOptionsClass,
+      onClick,
       renderIcon: Icon,
       size = defaults.size,
 
@@ -63,6 +64,7 @@ export let ButtonMenu = React.forwardRef(
         blockClass, // Apply the block class to the main HTML element
         className // Apply any supplied class names to the main HTML element.
       )}
+      onClick={onClick}
       menuOptionsClass={cx(`${blockClass}__options`, menuOptionsClass)}
       renderIcon={() => (
         <div
