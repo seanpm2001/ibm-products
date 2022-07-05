@@ -39,7 +39,7 @@ export default {
 const Template = (args) => {
   const [ isOpen, setIsOpen ] = useState(false)
   return (
-    <ButtonMenu label="Primary button" onClick={() => setIsOpen(!isOpen)} renderIcon={isOpen ? ChevronDown16 : ChevronDown16} {...args}>
+    <ButtonMenu label="Primary button" onClick={()=> setIsOpen(!isOpen)} renderIcon={isOpen ? ChevronUp16 : ChevronDown16} {...args}>
       <ButtonMenuItem
         itemText="Option 1a"
         onClick={action(`Click on Option 1`)}
