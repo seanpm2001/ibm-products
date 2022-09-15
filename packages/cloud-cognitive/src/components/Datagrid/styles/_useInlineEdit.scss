@@ -209,3 +209,69 @@ $row-heights: (
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.#{$block-class} [data-invalid] ~ .#{$carbon-prefix}--form-requirement,
+.#{$block-class} [data-invalid] .#{$carbon-prefix}--form-requirement {
+  position: absolute;
+  z-index: 999;
+  top: calc(100% - $spacing-01);
+  width: 100%;
+  padding: $spacing-03 $spacing-06 $spacing-03 $spacing-03;
+  margin: 0;
+  background-color: $ui-01;
+  outline: 0.125rem solid $danger-02;
+  outline-offset: -0.125rem;
+}
+
+.#{$block-class}
+  .#{$carbon-prefix}--list-box[data-invalid]:focus-within
+  ~ .#{$carbon-prefix}--form-requirement {
+  outline: 0.125rem solid $focus;
+}
+
+.#{$block-class} .#{$carbon-prefix}--list-box__invalid-icon,
+.#{$block-class} .#{$carbon-prefix}--text-input__invalid-icon,
+.#{$block-class} .#{$carbon-prefix}--number__invalid {
+  z-index: 9999;
+  top: calc(100% + #{$spacing-04} + #{$spacing-01});
+  right: $spacing-03;
+}
+
+.#{$block-class} .#{$carbon-prefix}--number__invalid {
+  top: calc(100% + #{$spacing-02} + #{$spacing-01});
+}
+
+.#{$block-class} .#{$carbon-prefix}--form-requirement::before {
+  position: absolute;
+  top: 0;
+  left: $spacing-01;
+  width: calc(100% - ($spacing-01 * 2));
+  height: $spacing-01;
+  background-color: $ui-01;
+  content: '';
+}
+
+.#{$block-class} .#{$carbon-prefix}--form-requirement::after {
+  position: absolute;
+  top: $spacing-01;
+  left: $spacing-03;
+  width: calc(100% - #{$spacing-03 * 2});
+  height: 1px;
+  background-color: $ui-03;
+  content: '';
+}
+
+.#{$block-class} tbody tr:hover {
+  .#{$carbon-prefix}--form-requirement::before {
+    background-color: $ui-03;
+  }
+  .#{$carbon-prefix}--form-requirement::after {
+    background-color: transparent;
+  }
+}
+
+.#{$block-class} .#{$carbon-prefix}--data-table .bx--dropdown,
+.#{$block-class} .#{$carbon-prefix}--data-table .bx--list-box,
+.#{$block-class} .#{$carbon-prefix}--data-table .bx--text-input {
+  background-color: transparent;
+}

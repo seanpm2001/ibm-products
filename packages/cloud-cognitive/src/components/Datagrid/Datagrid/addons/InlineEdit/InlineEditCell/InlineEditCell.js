@@ -55,6 +55,7 @@ export const InlineEditCell = ({
   const [inEditMode, setInEditMode] = useState(false);
   const [cellValue, setCellValue] = useState(value);
   const [initialValue, setInitialValue] = useState();
+  const [invalid, setInValid] = useState(false);
   const { activeCellId, editId } = state;
   const previousState = usePreviousValue({ editId, activeCellId });
   const { inputProps } = config || {};
@@ -116,6 +117,7 @@ export const InlineEditCell = ({
         },
       });
       setInEditMode(true);
+      setInValid(false);
       setTimeout(() => {
         if (type === 'selection' || type === 'date') {
           openDropdown(type);
@@ -258,13 +260,31 @@ export const InlineEditCell = ({
         initialSelectedItem={cell.value}
         itemToElement={(item) => renderDropdownItem(item)}
         renderSelectedItem={(item) => renderDropdownItem(item)}
+        invalid={invalid}
+        invalidText={inputProps?.invalidText}
         onChange={(item) => {
           const newCellId = getNewCellId('Enter');
-          saveCellData(item.selectedItem);
-          setCellValue(item.selectedItem);
-          dispatch({ type: 'EXIT_EDIT_MODE', payload: newCellId });
-          setInEditMode(false);
-          sendFocusBackToGrid();
+          if (!inputProps?.invalid) {
+            saveCellData(item.selectedItem);
+            setCellValue(item.selectedItem);
+            dispatch({ type: 'EXIT_EDIT_MODE', payload: newCellId });
+            setInEditMode(false);
+            sendFocusBackToGrid();
+            setInValid(false);
+          } else {
+            dispatch({
+              type: 'ENTER_EDIT_MODE',
+              payload: {
+                activeCellId: cellId,
+                editId: cellId,
+              },
+            });
+            saveCellData(initialValue);
+            setCellValue(initialValue);
+            setInEditMode(true);
+            setInValid(true);
+            sendFocusBackToGrid();
+          }
           inputProps?.onChange?.(item.selectedItem);
         }}
         downshiftProps={{
@@ -272,7 +292,7 @@ export const InlineEditCell = ({
             const { isOpen } = downshiftState || {};
             // !isOpen does not work in this case because a state change occurs on hover of the
             // menu items and isOpen is changed to undefined which causes dispatch to be called unexpectedly
-            if (isOpen === false) {
+            if (isOpen === false && !inputProps?.invalid) {
               dispatch({ type: 'EXIT_EDIT_MODE', payload: cellId });
               setInEditMode(false);
               sendFocusBackToGrid();
@@ -413,10 +433,18 @@ export const InlineEditCell = ({
               id={cellId}
               hideLabel
               defaultValue={cellValue}
+              invalid={invalid}
+              invalidText={inputProps?.invalidText}
               onChange={(event) => {
-                setCellValue(event.target.value);
                 if (inputProps.onChange) {
                   inputProps.onChange(event.target.value);
+                }
+                if (inputProps?.invalid) {
+                  setInValid(true);
+                  sendFocusBackToGrid();
+                  setCellValue(initialValue);
+                } else {
+                  setCellValue(event.target.value);
                 }
               }}
               ref={textInputRef}
@@ -430,10 +458,18 @@ export const InlineEditCell = ({
               id={cellId}
               hideLabel
               defaultValue={cellValue}
+              invalid={invalid}
+              invalidText={inputProps?.invalidText}
               onChange={(event) => {
-                setCellValue(event.imaginaryTarget.value);
                 if (inputProps.onChange) {
                   inputProps.onChange(event.imaginaryTarget.value);
+                }
+                if (inputProps?.invalid) {
+                  setInValid(true);
+                  sendFocusBackToGrid();
+                  setCellValue(initialValue);
+                } else {
+                  setCellValue(event.imaginaryTarget.value);
                 }
               }}
               ref={numberInputRef}

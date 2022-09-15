@@ -49,7 +49,10 @@ export const getInlineEditColumns = () => {
       accessor: 'lastName',
       inlineEdit: {
         type: 'text',
-        inputProps: {}, // These props are passed to the Carbon component used for inline editing
+        inputProps: {
+          invalid: true,
+          invalidText: 'Invalid input',
+        }, // These props are passed to the Carbon component used for inline editing
       },
     },
     {
@@ -67,7 +70,10 @@ export const getInlineEditColumns = () => {
       width: 120,
       inlineEdit: {
         type: 'number',
-        inputProps: {}, // These props are passed to the Carbon component used for inline editing
+        inputProps: {
+          invalid: true,
+          invalidText: 'Invalid number',
+        }, // These props are passed to the Carbon component used for inline editing
       },
     },
     {
@@ -96,7 +102,11 @@ export const getInlineEditColumns = () => {
         inputProps: {
           // These props are passed to the Carbon component used for inline editing
           items: inlineEditSelectItems,
-          onChange: (item) => console.log(item),
+          onChange: (item) => {
+            console.log(item);
+          },
+          invalid: true,
+          invalidText: 'Invalid selection',
         },
       },
     },
